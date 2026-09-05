@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ridgeline Cycles — Handbuilt Steel Frames</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #E8E4DC;
+    --paper-dark: #DDD7C9;
+    --ink: #20301F;
+    --forest: #2C3B2C;
+    --steel: #5A6B6D;
+    --rust: #A6512C;
+    --rust-dark: #83401F;
+    --line: rgba(32,48,31,0.16);
+    --max: 1180px;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    color:var(--ink);
+    font-weight:500;
+    line-height:1.1;
+  }
+
+  a{ color:inherit; text-decoration:none; }
+
+  img,svg{ display:block; max-width:100%; }
+
+  .wrap{
+    max-width:var(--max);
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(232,228,220,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+
+  nav.wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height:76px;
+  }
+
+  .brand{
+    font-family:'Fraunces', serif;
+    font-size:1.25rem;
+    font-weight:600;
+    letter-spacing:0.01em;
+  }
+
+  .brand span{ color:var(--rust); }
+
+  .nav-links{
+    display:flex;
+    gap:40px;
+    list-style:none;
+  }
+
+  .nav-links a{
+    font-size:0.95rem;
+    color:var(--forest);
+    padding:6px 0;
+    border-bottom:1px solid transparent;
+    transition:border-color 0.2s ease;
+  }
+
+  .nav-links a:hover{ border-color:var(--rust); }
+
+  .nav-cta{
+    display:inline-block;
+    padding:10px 22px;
+    background:var(--forest);
+    color:var(--paper);
+    border-radius:2px;
+    font-size:0.9rem;
+    font-weight:500;
+    transition:background 0.2s ease;
+  }
+
+  .nav-cta:hover{ background:var(--rust); }
+
+  .nav-toggle{ display:none; }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:96px 0 80px;
+    border-bottom:1px solid var(--line);
+  }
+
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:64px;
+    align-items:center;
+  }
+
+  .eyebrow-line{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:28px;
+    color:var(--steel);
+    font-size:0.9rem;
+  }
+
+  .eyebrow-line::before{
+    content:"";
+    width:36px;
+    height:1px;
+    background:var(--rust);
+  }
+
+  .hero h1{
+    font-size:clamp(2.6rem, 5vw, 4rem);
+    max-width:11ch;
+    margin-bottom:26px;
+  }
+
+  .hero p.lede{
+    font-size:1.15rem;
+    color:var(--steel);
+    max-width:46ch;
+    margin-bottom:36px;
+  }
+
+  .hero-actions{
+    display:flex;
+    align-items:center;
+    gap:28px;
+  }
+
+  .btn-primary{
+    display:inline-block;
+    padding:15px 30px;
+    background:var(--rust);
+    color:#fff;
+    border-radius:2px;
+    font-weight:500;
+    font-size:1rem;
+    transition:background 0.2s ease, transform 0.2s ease;
+  }
+
+  .btn-primary:hover{ background:var(--rust-dark); transform:translateY(-1px); }
+
+  .link-secondary{
+    font-size:0.95rem;
+    border-bottom:1px solid var(--ink);
+    padding-bottom:2px;
+  }
+
+  .hero-art{
+    background:var(--paper-dark);
+    border:1px solid var(--line);
+    border-radius:2px;
+    padding:28px;
+  }
+
+  .hero-art figcaption{
+    margin-top:16px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    color:var(--steel);
+    display:flex;
+    justify-content:space-between;
+  }
+
+  /* ---------- SECTION SHELL ---------- */
+  section{ padding:88px 0; }
+
+  .section-head{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+    align-items:end;
+    margin-bottom:56px;
+  }
+
+  .section-head h2{
+    font-size:2.2rem;
+  }
+
+  .section-head p{
+    color:var(--steel);
+    max-width:46ch;
+  }
+
+  /* ---------- PROCESS / FEATURES ---------- */
+  .process{ border-bottom:1px solid var(--line); }
+
+  .process-list{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    border-top:1px solid var(--line);
+  }
+
+  .process-item{
+    padding:32px 28px 32px 0;
+    border-right:1px solid var(--line);
+  }
+
+  .process-item:last-child{ border-right:none; padding-right:0; }
+
+  .process-item .num{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--rust);
+    font-size:0.85rem;
+    display:block;
+    margin-bottom:18px;
+  }
+
+  .process-item h3{
+    font-size:1.2rem;
+    margin-bottom:10px;
+  }
+
+  .process-item p{
+    color:var(--steel);
+    font-size:0.95rem;
+  }
+
+  /* ---------- SPEC / ABOUT ---------- */
+  .spec{
+    background:var(--forest);
+    color:var(--paper);
+    border-bottom:1px solid var(--line);
+  }
+
+  .spec h2, .spec p{ color:var(--paper); }
+  .spec .section-head p{ color:#B9C4B4; }
+
+  .spec-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:64px;
+  }
+
+  .spec-copy p{
+    color:#D9DED2;
+    margin-bottom:20px;
+    max-width:48ch;
+  }
+
+  .spec-table{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.9rem;
+    width:100%;
+    border-collapse:collapse;
+  }
+
+  .spec-table tr{ border-bottom:1px solid rgba(232,228,220,0.18); }
+  .spec-table tr:last-child{ border-bottom:none; }
+
+  .spec-table td{ padding:14px 0; }
+
+  .spec-table td:first-child{ color:#9FB09A; }
+  .spec-table td:last-child{ text-align:right; }
+
+  /* ---------- TESTIMONIALS ---------- */
+  .testimonials-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:36px;
+  }
+
+  .quote-card{
+    border-top:2px solid var(--rust);
+    padding-top:20px;
+  }
+
+  .quote-card p{
+    font-family:'Fraunces', serif;
+    font-size:1.15rem;
+    line-height:1.5;
+    margin-bottom:22px;
+  }
+
+  .quote-card .who{
+    font-size:0.85rem;
+    color:var(--steel);
+  }
+
+  /* ---------- CTA BAND ---------- */
+  .cta-band{
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:72px 0;
+    text-align:center;
+  }
+
+  .cta-band h2{
+    font-size:2.4rem;
+    max-width:16ch;
+    margin:0 auto 28px;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{ padding:64px 0 40px; }
+
+  .footer-grid{
+    display:grid;
+    grid-template-columns:1.4fr 1fr 1fr 1fr;
+    gap:40px;
+    padding-bottom:48px;
+    border-bottom:1px solid var(--line);
+  }
+
+  .footer-brand p{
+    color:var(--steel);
+    font-size:0.9rem;
+    max-width:32ch;
+    margin-top:14px;
+  }
+
+  .footer-col h4{
+    font-size:0.85rem;
+    color:var(--steel);
+    margin-bottom:16px;
+    font-weight:500;
+  }
+
+  .footer-col ul{ list-style:none; }
+
+  .footer-col li{ margin-bottom:10px; }
+
+  .footer-col a{
+    font-size:0.92rem;
+    color:var(--ink);
+  }
+
+  .footer-col a:hover{ color:var(--rust); }
+
+  .footer-bottom{
+    display:flex;
+    justify-content:space-between;
+    padding-top:28px;
+    font-size:0.82rem;
+    color:var(--steel);
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 860px){
+    .nav-links{ display:none; }
+    .hero-grid{ grid-template-columns:1fr; gap:40px; }
+    .hero{ padding:64px 0 56px; }
+    .section-head{ grid-template-columns:1fr; }
+    .process-list{ grid-template-columns:1fr; }
+    .process-item{ border-right:none; border-bottom:1px solid var(--line); padding:28px 0; }
+    .spec-grid{ grid-template-columns:1fr; gap:36px; }
+    .testimonials-grid{ grid-template-columns:1fr; gap:32px; }
+    .footer-grid{ grid-template-columns:1fr 1fr; }
+    .wrap{ padding:0 20px; }
+    section{ padding:64px 0; }
+  }
+
+  @media (max-width: 480px){
+    .footer-grid{ grid-template-columns:1fr; }
+    .footer-bottom{ flex-direction:column; gap:8px; }
+    .hero-actions{ flex-direction:column; align-items:flex-start; gap:16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <a href="#top" class="brand">Ridgeline <span>Cycles</span></a>
+    <ul class="nav-links">
+      <li><a href="#process">Process</a></li>
+      <li><a href="#specs">The Frame</a></li>
+      <li><a href="#stories">Stories</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">Book a Fitting</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow-line">Salida, Colorado — Est. 2011</div>
+        <h1>Steel frames, built one at a time, for the roads you actually ride.</h1>
+        <p class="lede">Every Ridgeline frame is fillet-brazed by hand in our Salida workshop, fitted to your body and your terrain before a single tube is cut.</p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn-primary">Start Your Build</a>
+          <a href="#process" class="link-secondary">See how it's made</a>
+        </div>
+      </div>
+      <figure class="hero-art">
+        <svg viewBox="0 0 420 300" width="100%">
+          <polyline points="60,230 150,110 260,110 340,230" fill="none" stroke="#2C3B2C" stroke-width="2.5"/>
+          <polyline points="150,110 190,230" fill="none" stroke="#2C3B2C" stroke-width="2.5"/>
+          <polyline points="60,230 190,230" fill="none" stroke="#A6512C" stroke-width="2.5"/>
+          <circle cx="60" cy="230" r="42" fill="none" stroke="#5A6B6D" stroke-width="2"/>
+          <circle cx="340" cy="230" r="42" fill="none" stroke="#5A6B6D" stroke-width="2"/>
+          <line x1="150" y1="110" x2="140" y2="88" stroke="#2C3B2C" stroke-width="2.5"/>
+          <line x1="140" y1="88" x2="118" y2="88" stroke="#2C3B2C" stroke-width="2.5"/>
+        </svg>
+        <figcaption>
+          <span>Model — Continental 631</span>
+          <span>Reynolds steel</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="process" id="process">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>From tubing to trailhead</h2>
+        <p>A frame takes us three weeks, start to finish. No batching, no shortcuts — one builder sees your frame through every stage.</p>
+      </div>
+      <div class="process-list">
+        <div class="process-item">
+          <span class="num">01</span>
+          <h3>Fit consultation</h3>
+          <p>We measure you, talk through your riding, and mock up geometry before ordering a single tube.</p>
+        </div>
+        <div class="process-item">
+          <span class="num">02</span>
+          <h3>Hand-mitred &amp; brazed</h3>
+          <p>Tubes are mitred, tacked, and fillet-brazed in-house, then filed smooth by hand.</p>
+        </div>
+        <div class="process-item">
+          <span class="num">03</span>
+          <h3>Paint &amp; delivery</h3>
+          <p>Frames are finished in our two-stage paint booth and shipped or handed over in person.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="spec" id="specs">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>The Continental 631</h2>
+        <p>Our do-it-all touring frame — loaded for a week in the backcountry or stripped down for a fast Sunday loop.</p>
+      </div>
+      <div class="spec-grid">
+        <div class="spec-copy">
+          <p>Built from Reynolds 631 air-hardened steel, the Continental holds its line loaded with panniers and still feels lively unloaded on a club ride.</p>
+          <p>Every frame ships with a lifetime crack warranty and a fit card documenting your exact geometry, so a repaint or a repair never means starting over.</p>
+        </div>
+        <table class="spec-table">
+          <tr><td>Tubing</td><td>Reynolds 631, double-butted</td></tr>
+          <tr><td>Head tube angle</td><td>72.5°</td></tr>
+          <tr><td>Seat tube angle</td><td>73°</td></tr>
+          <tr><td>Chainstay length</td><td>445mm</td></tr>
+          <tr><td>Bottom bracket drop</td><td>72mm</td></tr>
+          <tr><td>Max tire clearance</td><td>45mm w/ fenders</td></tr>
+          <tr><td>Frame weight</td><td>2.1kg (56cm)</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Riders on their Ridgeline</h2>
+        <p>Notes from the road, sent back to the shop by people who've put real miles on their frames.</p>
+      </div>
+      <div class="testimonials-grid">
+        <div class="quote-card">
+          <p>"Two years, four countries, and it still tracks straight loaded with 20kg of gear on washboard gravel."</p>
+          <div class="who">Dana Whitcombe — Continental 631, 2023</div>
+        </div>
+        <div class="quote-card">
+          <p>"The fit card meant my local shop could true a wheel without ever seeing the original build sheet."</p>
+          <div class="who">Marcus Boyle — Alpine Rando, 2022</div>
+        </div>
+        <div class="quote-card">
+          <p>"I've owned four production frames. None of them disappear underneath you the way this one does."</p>
+          <div class="who">Ilse Ferreira — Continental 631, 2024</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="wrap">
+      <h2>Your next frame starts with a conversation, not a catalogue.</h2>
+      <a href="#contact" class="btn-primary">Book a Fitting</a>
+    </div>
+  </section>
+
+</main>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand">Ridgeline <span>Cycles</span></div>
+        <p>412 Sackett Ave, Salida, CO 81201. Workshop visits by appointment.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Studio</h4>
+        <ul>
+          <li><a href="#process">Our Process</a></li>
+          <li><a href="#specs">Frame Specs</a></li>
+          <li><a href="#stories">Rider Stories</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:hello@ridgelinecycles.example">hello@ridgelinecycles.example</a></li>
+          <li><a href="tel:+15555550142">(555) 555-0142</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Follow</h4>
+        <ul>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Strava Club</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Ridgeline Cycles. All frames handbuilt in Colorado.</span>
+      <span>Made by hand since 2011</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
