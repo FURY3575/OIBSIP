@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thermal — Temperature Converter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cold:#2E6FE0;
+    --hot:#E0522E;
+    --ink:#1C2027;
+    --grey:#666C77;
+    --line:#E2E4E9;
+    --paper:#FFFFFF;
+    --bg:#F4F5F7;
+    --error:#C7371F;
+    --error-bg:#FDEDEA;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  body{
+    min-height:100vh;
+    background:var(--bg);
+    font-family:'Inter', sans-serif;
+    color:var(--ink);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:40px 20px;
+  }
+
+  .card{
+    width:100%;
+    max-width:480px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 1px 2px rgba(28,32,39,0.04);
+  }
+
+  .scale-bar{
+    height:6px;
+    background:linear-gradient(90deg, var(--cold), var(--hot));
+  }
+
+  .card-body{ padding:36px 34px 32px; }
+
+  h1{
+    font-family:'Sora', sans-serif;
+    font-weight:600;
+    font-size:1.5rem;
+    margin-bottom:6px;
+  }
+
+  .subtitle{
+    color:var(--grey);
+    font-size:0.92rem;
+    margin-bottom:30px;
+  }
+
+  label{
+    display:block;
+    font-size:0.85rem;
+    font-weight:500;
+    color:var(--ink);
+    margin-bottom:8px;
+  }
+
+  .field{ margin-bottom:22px; }
+
+  #tempInput{
+    width:100%;
+    padding:13px 16px;
+    font-size:1.05rem;
+    font-family:'Inter', sans-serif;
+    border:1.5px solid var(--line);
+    border-radius:8px;
+    outline:none;
+    transition:border-color 0.15s ease;
+    background:var(--paper);
+    color:var(--ink);
+  }
+
+  #tempInput:focus{ border-color:var(--cold); }
+  #tempInput.invalid{ border-color:var(--error); }
+
+  .unit-select{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:10px;
+  }
+
+  .unit-option{
+    position:relative;
+  }
+
+  .unit-option input{
+    position:absolute;
+    opacity:0;
+    width:100%;
+    height:100%;
+    margin:0;
+    cursor:pointer;
+  }
+
+  .unit-option .pill{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:12px 0;
+    border:1.5px solid var(--line);
+    border-radius:8px;
+    font-size:0.95rem;
+    font-weight:500;
+    color:var(--grey);
+    transition:all 0.15s ease;
+  }
+
+  .unit-option input:checked + .pill{
+    border-color:var(--ink);
+    background:var(--ink);
+    color:var(--paper);
+  }
+
+  .unit-option input:focus-visible + .pill{
+    outline:2px solid var(--cold);
+    outline-offset:2px;
+  }
+
+  .convert-btn{
+    width:100%;
+    padding:14px 0;
+    margin-top:6px;
+    background:var(--ink);
+    color:var(--paper);
+    border:none;
+    border-radius:8px;
+    font-size:1rem;
+    font-weight:600;
+    font-family:'Inter', sans-serif;
+    cursor:pointer;
+    transition:background 0.15s ease, transform 0.1s ease;
+  }
+
+  .convert-btn:hover{ background:#000; }
+  .convert-btn:active{ transform:scale(0.99); }
+
+  .error-msg{
+    display:none;
+    align-items:flex-start;
+    gap:10px;
+    margin-top:14px;
+    padding:12px 14px;
+    background:var(--error-bg);
+    color:var(--error);
+    border-radius:8px;
+    font-size:0.88rem;
+    line-height:1.45;
+  }
+
+  .error-msg.visible{ display:flex; }
+
+  .results{
+    margin-top:26px;
+    display:none;
+    grid-template-columns:repeat(3, 1fr);
+    gap:10px;
+  }
+
+  .results.visible{ display:grid; }
+
+  .result-cell{
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:16px 12px;
+    text-align:center;
+  }
+
+  .result-cell.source{
+    border-color:var(--ink);
+    background:#FAFAFA;
+  }
+
+  .result-cell .val{
+    font-family:'Sora', sans-serif;
+    font-size:1.3rem;
+    font-weight:600;
+    margin-bottom:4px;
+    word-break:break-all;
+  }
+
+  .result-cell .unit-label{
+    font-size:0.78rem;
+    color:var(--grey);
+  }
+
+  @media (max-width: 420px){
+    .card-body{ padding:28px 22px 26px; }
+    .unit-select{ gap:8px; }
+    .results{ gap:8px; }
+    .result-cell{ padding:12px 8px; }
+    .result-cell .val{ font-size:1.1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="scale-bar"></div>
+  <div class="card-body">
+    <h1>Temperature Converter</h1>
+    <p class="subtitle">Enter a value and choose its unit — Thermal converts it to the other two instantly.</p>
+
+    <form id="converterForm" novalidate>
+      <div class="field">
+        <label for="tempInput">Temperature value</label>
+        <input type="text" id="tempInput" inputmode="decimal" placeholder="e.g. 37" autocomplete="off">
+      </div>
+
+      <div class="field">
+        <label id="unitLabel">Input unit</label>
+        <div class="unit-select" role="radiogroup" aria-labelledby="unitLabel">
+          <label class="unit-option">
+            <input type="radio" name="unit" value="C" checked>
+            <span class="pill">°C</span>
+          </label>
+          <label class="unit-option">
+            <input type="radio" name="unit" value="F">
+            <span class="pill">°F</span>
+          </label>
+          <label class="unit-option">
+            <input type="radio" name="unit" value="K">
+            <span class="pill">K</span>
+          </label>
+        </div>
+      </div>
+
+      <button type="submit" class="convert-btn">Convert</button>
+
+      <div class="error-msg" id="errorMsg" role="alert"></div>
+
+      <div class="results" id="results">
+        <div class="result-cell" id="cellC">
+          <div class="val" id="valC">—</div>
+          <div class="unit-label">Celsius</div>
+        </div>
+        <div class="result-cell" id="cellF">
+          <div class="val" id="valF">—</div>
+          <div class="unit-label">Fahrenheit</div>
+        </div>
+        <div class="result-cell" id="cellK">
+          <div class="val" id="valK">—</div>
+          <div class="unit-label">Kelvin</div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('converterForm');
+  const input = document.getElementById('tempInput');
+  const errorMsg = document.getElementById('errorMsg');
+  const results = document.getElementById('results');
+  const cells = { C: document.getElementById('cellC'), F: document.getElementById('cellF'), K: document.getElementById('cellK') };
+  const vals = { C: document.getElementById('valC'), F: document.getElementById('valF'), K: document.getElementById('valK') };
+
+  const ABS_ZERO_C = -273.15;
+
+  function showError(message){
+    errorMsg.textContent = message;
+    errorMsg.classList.add('visible');
+    results.classList.remove('visible');
+    input.classList.add('invalid');
+  }
+
+  function clearError(){
+    errorMsg.classList.remove('visible');
+    errorMsg.textContent = '';
+    input.classList.remove('invalid');
+  }
+
+  function formatNum(n){
+    // Round to 2 decimal places, trim trailing zeros
+    return (Math.round(n * 100) / 100).toString();
+  }
+
+  function convert(value, unit){
+    let celsius;
+    if(unit === 'C') celsius = value;
+    else if(unit === 'F') celsius = (value - 32) * 5/9;
+    else celsius = value - 273.15; // K
+
+    return {
+      C: celsius,
+      F: celsius * 9/5 + 32,
+      K: celsius + 273.15
+    };
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    clearError();
+
+    const raw = input.value.trim();
+
+    if(raw === ''){
+      showError('Enter a temperature value before converting.');
+      return;
+    }
+
+    // Reject anything that isn't a valid number (allows leading minus, decimals)
+    if(!/^-?\d+(\.\d+)?$/.test(raw)){
+      showError('That doesn\u2019t look like a number. Use digits only, e.g. -40 or 98.6.');
+      return;
+    }
+
+    const value = parseFloat(raw);
+    const unit = form.querySelector('input[name="unit"]:checked').value;
+    const { C, F, K } = convert(value, unit);
+
+    if(C < ABS_ZERO_C - 1e-9){
+      showError('That\u2019s colder than absolute zero (\u2212273.15\u00b0C / \u2212459.67\u00b0F / 0K) \u2014 no such temperature exists. Try a value at or above absolute zero.');
+      return;
+    }
+
+    vals.C.textContent = formatNum(C) + '\u00b0';
+    vals.F.textContent = formatNum(F) + '\u00b0';
+    vals.K.textContent = formatNum(K);
+
+    Object.keys(cells).forEach(u => cells[u].classList.toggle('source', u === unit));
+
+    results.classList.add('visible');
+  });
+
+  input.addEventListener('input', clearError);
+  form.querySelectorAll('input[name="unit"]').forEach(r => r.addEventListener('change', clearError));
+</script>
+
+</body>
+</html>
