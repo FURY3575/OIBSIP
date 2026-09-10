@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A.P.J. Abdul Kalam — The People's President</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#111827;
+    --night-2:#1B2438;
+    --cream:#FAF6EE;
+    --cream-line:rgba(30,25,15,0.12);
+    --marigold:#E08A2C;
+    --marigold-light:#F0A94E;
+    --ink:#241F14;
+    --ink-soft:#4B4232;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3{
+    font-family:'Spectral', serif;
+    font-weight:600;
+    line-height:1.15;
+  }
+
+  .wrap{
+    max-width:920px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  a{ color:inherit; }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:88vh;
+    display:flex;
+    align-items:flex-end;
+    background:
+      linear-gradient(180deg, rgba(17,24,39,0.2) 0%, rgba(10,14,24,0.9) 88%),
+      url('https://commons.wikimedia.org/wiki/Special:FilePath/A._P._J._Abdul_Kalam_in_2008.jpg') center 22% / cover no-repeat;
+    color:var(--cream);
+  }
+
+  .hero-inner{
+    padding:64px 32px 56px;
+    max-width:920px;
+    margin:0 auto;
+    width:100%;
+  }
+
+  .hero-eyebrow{
+    font-family:'Spectral', serif;
+    font-style:italic;
+    font-size:1.1rem;
+    color:var(--marigold-light);
+    margin-bottom:14px;
+  }
+
+  .hero h1{
+    font-size:clamp(2.4rem, 5.6vw, 4rem);
+    margin-bottom:16px;
+  }
+
+  .hero .tagline{
+    font-family:'Spectral', serif;
+    font-size:1.4rem;
+    color:#E7E2D3;
+    max-width:36ch;
+  }
+
+  .hero .dates{
+    margin-top:22px;
+    font-size:0.85rem;
+    letter-spacing:0.04em;
+    color:#B9B2A0;
+  }
+
+  .credit{
+    position:absolute;
+    bottom:16px;
+    right:24px;
+    font-size:0.72rem;
+    color:rgba(250,246,238,0.55);
+  }
+  .credit a{ color:rgba(250,246,238,0.75); }
+
+  /* ---------- BIO ---------- */
+  .bio{ padding:96px 0 88px; }
+
+  .kicker{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    color:var(--marigold);
+    font-size:0.82rem;
+    letter-spacing:0.04em;
+    margin-bottom:20px;
+  }
+
+  .kicker::before{
+    content:"";
+    width:32px;
+    height:1px;
+    background:var(--marigold);
+  }
+
+  .bio h2{
+    font-size:2.1rem;
+    margin-bottom:36px;
+    max-width:22ch;
+  }
+
+  .bio p{
+    font-size:1.08rem;
+    color:var(--ink-soft);
+    max-width:70ch;
+    margin-bottom:22px;
+  }
+
+  .bio p:last-child{ margin-bottom:0; }
+
+  .drop-cap::first-letter{
+    font-family:'Spectral', serif;
+    font-size:3.4rem;
+    font-weight:700;
+    float:left;
+    line-height:0.8;
+    padding:6px 8px 0 0;
+    color:var(--marigold);
+  }
+
+  /* ---------- TIMELINE (dark section) ---------- */
+  .timeline-section{
+    background:var(--night);
+    color:#EAE6D9;
+    padding:96px 0;
+  }
+
+  .timeline-section .kicker{ color:var(--marigold-light); }
+  .timeline-section .kicker::before{ background:var(--marigold-light); }
+
+  .timeline-section h2{
+    color:var(--cream);
+    font-size:2.1rem;
+    margin-bottom:48px;
+    max-width:22ch;
+  }
+
+  .timeline{
+    display:flex;
+    flex-direction:column;
+  }
+
+  .t-item{
+    display:grid;
+    grid-template-columns:120px 1fr;
+    gap:28px;
+    padding:26px 0;
+    border-top:1px solid rgba(234,230,217,0.14);
+  }
+
+  .t-item:last-child{ border-bottom:1px solid rgba(234,230,217,0.14); }
+
+  .t-year{
+    font-family:'Spectral', serif;
+    font-size:1.3rem;
+    color:var(--marigold-light);
+  }
+
+  .t-body h3{
+    font-family:'Inter', sans-serif;
+    font-weight:600;
+    font-size:1.05rem;
+    margin-bottom:6px;
+    color:var(--cream);
+  }
+
+  .t-body p{
+    color:#B9BFCC;
+    font-size:0.96rem;
+    max-width:56ch;
+  }
+
+  /* ---------- QUOTE ---------- */
+  .quote-section{
+    background:var(--cream);
+    padding:100px 0;
+    text-align:center;
+  }
+
+  .quote-mark{
+    font-family:'Spectral', serif;
+    font-size:4rem;
+    color:var(--marigold);
+    line-height:1;
+    margin-bottom:10px;
+  }
+
+  blockquote{
+    font-family:'Spectral', serif;
+    font-style:italic;
+    font-size:clamp(1.6rem, 3.4vw, 2.3rem);
+    max-width:24ch;
+    margin:0 auto 24px;
+    color:var(--ink);
+    line-height:1.35;
+  }
+
+  .quote-section cite{
+    font-style:normal;
+    font-size:0.85rem;
+    letter-spacing:0.04em;
+    color:var(--ink-soft);
+  }
+
+  /* ---------- LEGACY STRIP ---------- */
+  .legacy{
+    background:var(--night-2);
+    color:#EAE6D9;
+    padding:72px 0;
+  }
+
+  .legacy .wrap{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:36px;
+  }
+
+  .legacy-item .num{
+    font-family:'Spectral', serif;
+    color:var(--marigold-light);
+    font-size:1.5rem;
+    margin-bottom:8px;
+  }
+
+  .legacy-item p{ color:#B9BFCC; font-size:0.92rem; }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    padding:48px 0;
+    background:var(--cream);
+    border-top:1px solid var(--cream-line);
+    text-align:center;
+  }
+
+  footer p{
+    font-size:0.82rem;
+    color:var(--ink-soft);
+    max-width:60ch;
+    margin:0 auto;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 720px){
+    .wrap{ padding:0 22px; }
+    .hero-inner{ padding:48px 22px 40px; }
+    .hero{ min-height:70vh; }
+    .bio{ padding:64px 0; }
+    .timeline-section{ padding:64px 0; }
+    .t-item{ grid-template-columns:1fr; gap:6px; }
+    .legacy .wrap{ grid-template-columns:1fr; gap:28px; }
+    .quote-section{ padding:72px 0; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">A Tribute</div>
+    <h1>A.P.J. Abdul Kalam</h1>
+    <p class="tagline">A boatman's son who helped launch India into space, then spent his life trying to launch a nation's students instead.</p>
+    <div class="dates">1931 — 2015 · Aerospace Scientist &amp; 11th President of India</div>
+  </div>
+  <div class="credit">Photo, 2008 · <a href="https://commons.wikimedia.org/wiki/File:A._P._J._Abdul_Kalam_in_2008.jpg" target="_blank" rel="noopener">Wikimedia Commons</a></div>
+</header>
+
+<section class="bio">
+  <div class="wrap">
+    <div class="kicker">His Story</div>
+    <h2>From selling newspapers in Rameswaram to leading a nation's missile programme</h2>
+
+    <p class="drop-cap">Avul Pakir Jainulabdeen Abdul Kalam was born in 1931 in Rameswaram, a small pilgrim town on the Tamil Nadu coast, to a family of modest means — his father owned a boat and served as an imam at the local mosque. As a boy, Kalam delivered newspapers to help support the household, and it was here, watching birds and boats on the water, that he first grew fascinated with flight. That curiosity carried him through a physics degree at St. Joseph's College and, later, aerospace engineering at the Madras Institute of Technology, where he narrowly missed becoming a fighter pilot by a single qualifying rank.</p>
+
+    <p>Kalam joined India's Defence Research and Development Organisation in 1958, and a decade later moved to the newly forming Indian Space Research Organisation, where he served as project director for the SLV-3 — the rocket that carried India's first satellite, Rohini, into orbit in 1980, using a launch vehicle designed and built entirely within the country. He returned to DRDO in the 1980s to lead the Integrated Guided Missile Development Programme, overseeing the creation of the Agni and Prithvi missiles. That work, along with his central role in the 1998 Pokhran-II nuclear tests, earned him a nickname that stuck for the rest of his life: the Missile Man of India.</p>
+
+    <p>In 2002, Kalam was elected the eleventh President of India with rare support that crossed party lines. He brought an unusually informal warmth to the role, opening the presidential residence to schoolchildren and answering questions from students by the thousands. People began calling him the "People's President" — a title that outlasted his single term in office. After 2007, he returned happily to teaching, lecturing at institutions across the country and co-developing a low-cost coronary stent with a cardiologist, because he wanted his engineering to save lives as well as launch rockets.</p>
+
+    <p>Kalam never married, owned almost nothing beyond a few books and a veena, and kept teaching until the very end of his life. On 27 July 2015, while delivering a lecture to students at IIM Shillong — the audience he always said he loved most — he collapsed and died of cardiac arrest. He was buried in his hometown of Rameswaram with full state honours, mourned by a country that, to him, had always felt like a classroom full of students still dreaming.</p>
+  </div>
+</section>
+
+<section class="timeline-section">
+  <div class="wrap">
+    <div class="kicker">Key Moments</div>
+    <h2>A life spent building and teaching</h2>
+    <div class="timeline">
+      <div class="t-item">
+        <div class="t-year">1931</div>
+        <div class="t-body">
+          <h3>Born in Rameswaram</h3>
+          <p>Born to a boat-owning family in coastal Tamil Nadu, Kalam sells newspapers as a boy to help support his household.</p>
+        </div>
+      </div>
+      <div class="t-item">
+        <div class="t-year">1958</div>
+        <div class="t-body">
+          <h3>Joins DRDO</h3>
+          <p>After training in aerospace engineering, Kalam joins the Defence Research and Development Organisation as a scientist.</p>
+        </div>
+      </div>
+      <div class="t-item">
+        <div class="t-year">1980</div>
+        <div class="t-body">
+          <h3>SLV-3 reaches orbit</h3>
+          <p>As project director at ISRO, Kalam helps launch the Rohini satellite aboard India's first indigenously built satellite launch vehicle.</p>
+        </div>
+      </div>
+      <div class="t-item">
+        <div class="t-year">1980s–90s</div>
+        <div class="t-body">
+          <h3>Becomes the "Missile Man"</h3>
+          <p>Leads the development of the Agni and Prithvi missiles and plays a key role in the 1998 Pokhran-II nuclear tests.</p>
+        </div>
+      </div>
+      <div class="t-item">
+        <div class="t-year">2002</div>
+        <div class="t-body">
+          <h3>Elected President of India</h3>
+          <p>Becomes the country's 11th President with cross-party support, earning the nickname "the People's President" for his accessibility.</p>
+        </div>
+      </div>
+      <div class="t-item">
+        <div class="t-year">2015</div>
+        <div class="t-body">
+          <h3>Dies while lecturing students</h3>
+          <p>Collapses from cardiac arrest while addressing students at IIM Shillong, and is laid to rest in Rameswaram with full state honours.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="quote-section">
+  <div class="wrap">
+    <div class="quote-mark">&ldquo;</div>
+    <blockquote>You have to dream before your dreams can come true.</blockquote>
+    <cite>— A.P.J. Abdul Kalam</cite>
+  </div>
+</section>
+
+<section class="legacy">
+  <div class="wrap">
+    <div class="legacy-item">
+      <div class="num">SLV-3</div>
+      <p>The rocket he helped build made India one of the few nations to independently launch its own satellite.</p>
+    </div>
+    <div class="legacy-item">
+      <div class="num">Oct. 15</div>
+      <p>His birthday is observed in India as World Students' Day, honouring his lifelong devotion to teaching.</p>
+    </div>
+    <div class="legacy-item">
+      <div class="num">Bharat Ratna</div>
+      <p>India's highest civilian honour, awarded to Kalam in 1997 for his contributions to science and defence technology.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Content on this page is original and paraphrased from publicly available biographical sources. Photograph: A.P.J. Abdul Kalam, 2008, sourced from Wikimedia Commons.</p>
+  </div>
+</footer>
+
+</body>
+</html>
