@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel — Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --case:#2A2B2E;
+    --case-light:#34363A;
+    --screen:#1B1C1E;
+    --amber:#F5A623;
+    --amber-dim:#8A5F16;
+    --key-num:#ECEAE4;
+    --key-num-text:#2A2B2E;
+    --key-fn:#4A5560;
+    --key-fn-text:#ECEAE4;
+    --key-op:#3B3E44;
+    --key-op-text:#F5A623;
+    --key-eq:#F5A623;
+    --key-eq-text:#2A2B2E;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  body{
+    min-height:100vh;
+    background:#101113;
+    background-image:
+      radial-gradient(circle at 50% 0%, #1C1E22 0%, #101113 60%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:32px 16px;
+    font-family:'Sora', sans-serif;
+  }
+
+  .calculator{
+    width:100%;
+    max-width:340px;
+    background:var(--case);
+    border-radius:22px;
+    padding:22px;
+    box-shadow:
+      0 30px 60px rgba(0,0,0,0.45),
+      inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+
+  .brand-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:2px 4px 16px;
+  }
+
+  .brand-row .brand{
+    font-size:0.78rem;
+    font-weight:600;
+    letter-spacing:0.02em;
+    color:#8B8F97;
+  }
+
+  .brand-row .brand span{ color:var(--amber); }
+
+  .brand-row .dots{ display:flex; gap:5px; }
+
+  .brand-row .dots i{
+    width:6px; height:6px; border-radius:50%;
+    background:#4A4D53; display:block;
+  }
+
+  .screen{
+    background:var(--screen);
+    border-radius:14px;
+    padding:22px 18px 18px;
+    margin-bottom:18px;
+    border:1px solid rgba(255,255,255,0.03);
+  }
+
+  .expression{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.9rem;
+    color:#6B6F76;
+    min-height:20px;
+    text-align:right;
+    letter-spacing:0.02em;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+
+  .display{
+    font-family:'JetBrains Mono', monospace;
+    font-size:2.4rem;
+    font-weight:500;
+    color:var(--amber);
+    text-align:right;
+    margin-top:6px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    text-shadow:0 0 18px rgba(245,166,35,0.28);
+  }
+
+  .display.error{ color:#E0522E; font-size:1.6rem; text-shadow:0 0 18px rgba(224,82,46,0.28); }
+
+  .keys{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    grid-auto-rows:60px;
+    gap:10px;
+  }
+
+  button{
+    font-family:'Sora', sans-serif;
+    font-size:1.15rem;
+    font-weight:600;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    transition:transform 0.08s ease, filter 0.12s ease;
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  button:active{ transform:scale(0.95); }
+
+  .key-num{
+    background:var(--key-num);
+    color:var(--key-num-text);
+  }
+  .key-num:hover{ filter:brightness(1.05); }
+
+  .key-fn{
+    background:var(--key-fn);
+    color:var(--key-fn-text);
+    font-size:1rem;
+  }
+  .key-fn:hover{ filter:brightness(1.12); }
+
+  .key-op{
+    background:var(--key-op);
+    color:var(--key-op-text);
+    font-family:'JetBrains Mono', monospace;
+    font-size:1.3rem;
+  }
+  .key-op:hover{ filter:brightness(1.2); }
+
+  .key-op.active{ background:var(--amber); color:var(--case); }
+
+  .key-eq{
+    background:var(--key-eq);
+    color:var(--key-eq-text);
+    font-size:1.3rem;
+  }
+  .key-eq:hover{ filter:brightness(1.08); }
+
+  .span-2{ grid-column:span 2; }
+  .span-row-2{ grid-row:span 2; }
+
+  button:focus-visible{
+    outline:2px solid var(--amber);
+    outline-offset:2px;
+  }
+
+  @media (max-width: 380px){
+    .calculator{ padding:16px; }
+    .keys{ grid-auto-rows:54px; gap:8px; }
+    .display{ font-size:2rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="calculator">
+  <div class="brand-row">
+    <span class="brand">Panel<span>.</span></span>
+    <div class="dots"><i></i><i></i><i></i></div>
+  </div>
+
+  <div class="screen">
+    <div class="expression" id="expression">&nbsp;</div>
+    <div class="display" id="display">0</div>
+  </div>
+
+  <div class="keys">
+    <button class="key-fn" data-action="clear">C</button>
+    <button class="key-fn" data-action="backspace">⌫</button>
+    <button class="key-op" data-operator="÷">÷</button>
+    <button class="key-op" data-operator="×">×</button>
+
+    <button class="key-num" data-digit="7">7</button>
+    <button class="key-num" data-digit="8">8</button>
+    <button class="key-num" data-digit="9">9</button>
+    <button class="key-op" data-operator="−">−</button>
+
+    <button class="key-num" data-digit="4">4</button>
+    <button class="key-num" data-digit="5">5</button>
+    <button class="key-num" data-digit="6">6</button>
+    <button class="key-op" data-operator="+">+</button>
+
+    <button class="key-num" data-digit="1">1</button>
+    <button class="key-num" data-digit="2">2</button>
+    <button class="key-num" data-digit="3">3</button>
+    <button class="key-eq span-row-2" data-action="equals">=</button>
+
+    <button class="key-num span-2" data-digit="0">0</button>
+    <button class="key-num" data-action="decimal">.</button>
+  </div>
+</div>
+
+<script>
+  const displayEl = document.getElementById('display');
+  const expressionEl = document.getElementById('expression');
+  const operatorButtons = document.querySelectorAll('[data-operator]');
+
+  const state = {
+    display: '0',
+    firstOperand: null,
+    operator: null,
+    waitingForSecondOperand: false,
+    isError: false
+  };
+
+  function render(){
+    displayEl.textContent = state.display;
+    displayEl.classList.toggle('error', state.isError);
+
+    if(state.operator && state.firstOperand !== null){
+      const opLabel = state.waitingForSecondOperand ? '' : state.display;
+      expressionEl.textContent = `${formatNumber(state.firstOperand)} ${state.operator}`;
+    } else {
+      expressionEl.textContent = '\u00A0';
+    }
+
+    operatorButtons.forEach(btn => {
+      btn.classList.toggle('active', state.operator === btn.dataset.operator && state.waitingForSecondOperand);
+    });
+  }
+
+  function formatNumber(num){
+    if(typeof num !== 'number' || !isFinite(num)) return String(num);
+    // Trim floating point noise, cap displayed length
+    const rounded = Math.round(num * 1e9) / 1e9;
+    const str = rounded.toString();
+    return str.length > 12 ? rounded.toPrecision(8).replace(/\.?0+$/, '') : str;
+  }
+
+  function resetIfError(){
+    if(state.isError) fullReset();
+  }
+
+  function fullReset(){
+    state.display = '0';
+    state.firstOperand = null;
+    state.operator = null;
+    state.waitingForSecondOperand = false;
+    state.isError = false;
+  }
+
+  function inputDigit(digit){
+    resetIfError();
+    if(state.waitingForSecondOperand){
+      state.display = digit;
+      state.waitingForSecondOperand = false;
+    } else {
+      state.display = state.display === '0' ? digit : state.display + digit;
+    }
+  }
+
+  function inputDecimal(){
+    resetIfError();
+    if(state.waitingForSecondOperand){
+      state.display = '0.';
+      state.waitingForSecondOperand = false;
+      return;
+    }
+    if(!state.display.includes('.')) state.display += '.';
+  }
+
+  function backspace(){
+    resetIfError();
+    if(state.waitingForSecondOperand) return;
+    state.display = state.display.length > 1 ? state.display.slice(0, -1) : '0';
+  }
+
+  function calculate(first, second, operator){
+    switch(operator){
+      case '+': return first + second;
+      case '−': return first - second;
+      case '×': return first * second;
+      case '÷':
+        if(second === 0) return 'DIV_ZERO';
+        return first / second;
+      default: return second;
+    }
+  }
+
+  function applyOperator(nextOperator){
+    resetIfError();
+    const inputValue = parseFloat(state.display);
+
+    if(state.operator && state.waitingForSecondOperand){
+      state.operator = nextOperator;
+      render();
+      return;
+    }
+
+    if(state.firstOperand === null){
+      state.firstOperand = inputValue;
+    } else if(state.operator){
+      const result = calculate(state.firstOperand, inputValue, state.operator);
+      if(result === 'DIV_ZERO'){
+        showError();
+        return;
+      }
+      state.firstOperand = result;
+      state.display = formatNumber(result);
+    }
+
+    state.waitingForSecondOperand = true;
+    state.operator = nextOperator;
+  }
+
+  function equals(){
+    resetIfError();
+    if(state.operator === null || state.waitingForSecondOperand) { render(); return; }
+
+    const inputValue = parseFloat(state.display);
+    const result = calculate(state.firstOperand, inputValue, state.operator);
+
+    if(result === 'DIV_ZERO'){
+      showError();
+      return;
+    }
+
+    state.display = formatNumber(result);
+    state.firstOperand = null;
+    state.operator = null;
+    state.waitingForSecondOperand = false;
+  }
+
+  function showError(){
+    state.display = 'Error: ÷0';
+    state.isError = true;
+    state.firstOperand = null;
+    state.operator = null;
+    state.waitingForSecondOperand = false;
+    render();
+  }
+
+  // ---- Event listeners (no inline onclick attributes) ----
+  document.querySelectorAll('[data-digit]').forEach(btn => {
+    btn.addEventListener('click', () => { inputDigit(btn.dataset.digit); render(); });
+  });
+
+  operatorButtons.forEach(btn => {
+    btn.addEventListener('click', () => { applyOperator(btn.dataset.operator); render(); });
+  });
+
+  document.querySelector('[data-action="decimal"]').addEventListener('click', () => { inputDecimal(); render(); });
+  document.querySelector('[data-action="clear"]').addEventListener('click', () => { fullReset(); render(); });
+  document.querySelector('[data-action="backspace"]').addEventListener('click', () => { backspace(); render(); });
+  document.querySelector('[data-action="equals"]').addEventListener('click', () => { equals(); render(); });
+
+  // Optional keyboard support
+  window.addEventListener('keydown', (e) => {
+    if(e.key >= '0' && e.key <= '9'){ inputDigit(e.key); render(); }
+    else if(e.key === '.'){ inputDecimal(); render(); }
+    else if(e.key === '+'){ applyOperator('+'); render(); }
+    else if(e.key === '-'){ applyOperator('−'); render(); }
+    else if(e.key === '*'){ applyOperator('×'); render(); }
+    else if(e.key === '/'){ e.preventDefault(); applyOperator('÷'); render(); }
+    else if(e.key === 'Enter' || e.key === '='){ equals(); render(); }
+    else if(e.key === 'Backspace'){ backspace(); render(); }
+    else if(e.key === 'Escape'){ fullReset(); render(); }
+  });
+
+  render();
+</script>
+
+</body>
+</html>
