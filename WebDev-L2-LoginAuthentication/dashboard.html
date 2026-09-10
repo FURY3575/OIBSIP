@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Vaultline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="auth-style.css">
+<script src="auth-core.js"></script>
+<script>
+  // Guard the page before anything renders: no session, no dashboard.
+  requireSession();
+</script>
+</head>
+<body>
+
+<div class="dash-shell">
+  <header class="dash-header">
+    <div class="dash-header-inner">
+      <div class="auth-mark"><span class="dot"></span><span>Vaultline</span></div>
+      <button class="btn-ghost" id="logoutBtn">Log out</button>
+    </div>
+  </header>
+
+  <main class="dash-main">
+    <div class="welcome-card">
+      <div class="kicker">Protected area</div>
+      <h1 id="welcomeHeading">Welcome back</h1>
+      <p>You're seeing this page because you're logged in. Refresh anytime — you'll stay signed in until you log out.</p>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-cell">
+        <div class="label">Signed in as</div>
+        <div class="value" id="infoIdentifier">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="label">Session started</div>
+        <div class="value" id="infoSession">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="label">Account created</div>
+        <div class="value" id="infoCreated">—</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  const session = getSession();
+
+  // requireSession() already redirected if there's no session, but guard
+  // again here in case this script runs before the redirect completes.
+  if(session){
+    const user = findUser(session.identifier);
+
+    document.getElementById('welcomeHeading').textContent = `Welcome back, ${session.identifier.split('@')[0]}`;
+    document.getElementById('infoIdentifier').textContent = session.identifier;
+    document.getElementById('infoSession').textContent = new Date(session.loggedInAt).toLocaleString();
+    document.getElementById('infoCreated').textContent = user ? new Date(user.createdAt).toLocaleString() : '—';
+  }
+
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    clearSession();
+    window.location.href = 'login.html';
+  });
+</script>
+
+</body>
+</html>

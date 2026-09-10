@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register — Vaultline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="auth-style.css">
+</head>
+<body>
+
+<div class="auth-shell">
+  <div class="auth-card">
+    <div class="auth-mark"><span class="dot"></span><span>Vaultline</span></div>
+    <h1>Create your account</h1>
+    <p class="auth-sub">A few details and you're in.</p>
+
+    <div class="alert error" id="errorAlert"></div>
+    <div class="alert success" id="successAlert"></div>
+
+    <form id="registerForm" novalidate>
+      <div class="field">
+        <label for="identifier">Username or email</label>
+        <input type="text" id="identifier" placeholder="jane@example.com" autocomplete="username">
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="At least 8 characters, 1 number" autocomplete="new-password">
+        <div class="field-hint">Minimum 8 characters, including at least one number.</div>
+      </div>
+      <div class="field">
+        <label for="confirmPassword">Confirm password</label>
+        <input type="password" id="confirmPassword" placeholder="Re-enter your password" autocomplete="new-password">
+      </div>
+      <button type="submit" class="btn-primary">Register</button>
+    </form>
+
+    <div class="auth-switch">Already have an account? <a href="login.html">Log in</a></div>
+  </div>
+</div>
+
+<script src="auth-core.js"></script>
+<script>
+  const form = document.getElementById('registerForm');
+  const identifierInput = document.getElementById('identifier');
+  const passwordInput = document.getElementById('password');
+  const confirmInput = document.getElementById('confirmPassword');
+  const errorAlert = document.getElementById('errorAlert');
+  const successAlert = document.getElementById('successAlert');
+
+  function showError(message){
+    errorAlert.textContent = message;
+    errorAlert.classList.add('visible');
+    successAlert.classList.remove('visible');
+  }
+
+  function clearAlerts(){
+    errorAlert.classList.remove('visible');
+    successAlert.classList.remove('visible');
+    [identifierInput, passwordInput, confirmInput].forEach(el => el.classList.remove('invalid'));
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearAlerts();
+
+    const identifier = identifierInput.value.trim();
+    const password = passwordInput.value;
+    const confirmPassword = confirmInput.value;
+
+    // Basic empty-field validation
+    if(!identifier || !password || !confirmPassword){
+      showError('Please fill in every field before registering.');
+      if(!identifier) identifierInput.classList.add('invalid');
+      if(!password) passwordInput.classList.add('invalid');
+      if(!confirmPassword) confirmInput.classList.add('invalid');
+      return;
+    }
+
+    // Password strength validation
+    if(!validatePasswordRules(password)){
+      showError('Password must be at least 8 characters and include at least one number.');
+      passwordInput.classList.add('invalid');
+      return;
+    }
+
+    if(password !== confirmPassword){
+      showError('Passwords do not match.');
+      confirmInput.classList.add('invalid');
+      return;
+    }
+
+    // Duplicate check
+    if(findUser(identifier)){
+      showError('An account with that username or email already exists.');
+      identifierInput.classList.add('invalid');
+      return;
+    }
+
+    const passwordHash = await hashPassword(password);
+    const users = getUsers();
+    users.push({
+      identifier,
+      passwordHash,
+      createdAt: new Date().toISOString()
+    });
+    saveUsers(users);
+
+    successAlert.textContent = 'Account created! Redirecting you to login…';
+    successAlert.classList.add('visible');
+    form.reset();
+
+    setTimeout(() => { window.location.href = 'login.html'; }, 1200);
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — Vaultline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="auth-style.css">
+</head>
+<body>
+
+<div class="auth-shell">
+  <div class="auth-card">
+    <div class="auth-mark"><span class="dot"></span><span>Vaultline</span></div>
+    <h1>Welcome back</h1>
+    <p class="auth-sub">Log in to reach your dashboard.</p>
+
+    <div class="alert error" id="errorAlert"></div>
+
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="identifier">Username or email</label>
+        <input type="text" id="identifier" placeholder="jane@example.com" autocomplete="username">
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password">
+      </div>
+      <button type="submit" class="btn-primary">Login</button>
+    </form>
+
+    <div class="auth-switch">Don't have an account? <a href="register.html">Register</a></div>
+  </div>
+</div>
+
+<script src="auth-core.js"></script>
+<script>
+  const form = document.getElementById('loginForm');
+  const identifierInput = document.getElementById('identifier');
+  const passwordInput = document.getElementById('password');
+  const errorAlert = document.getElementById('errorAlert');
+
+  function showError(message){
+    errorAlert.textContent = message;
+    errorAlert.classList.add('visible');
+  }
+
+  function clearAlerts(){
+    errorAlert.classList.remove('visible');
+    [identifierInput, passwordInput].forEach(el => el.classList.remove('invalid'));
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearAlerts();
+
+    const identifier = identifierInput.value.trim();
+    const password = passwordInput.value;
+
+    if(!identifier || !password){
+      showError('Please enter both your username/email and password.');
+      if(!identifier) identifierInput.classList.add('invalid');
+      if(!password) passwordInput.classList.add('invalid');
+      return;
+    }
+
+    const user = findUser(identifier);
+    const attemptedHash = await hashPassword(password);
+
+    // Generic error message — never reveal whether the identifier or the
+    // password was the one that didn't match.
+    if(!user || user.passwordHash !== attemptedHash){
+      showError('Incorrect username/email or password.');
+      identifierInput.classList.add('invalid');
+      passwordInput.classList.add('invalid');
+      return;
+    }
+
+    setSession(user.identifier);
+    window.location.href = 'dashboard.html';
+  });
+</script>
+
+</body>
+</html>
