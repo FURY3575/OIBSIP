@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mohit Kumar — Web Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#14171C;
+    --panel:#1C2129;
+    --panel-2:#20262F;
+    --gold:#E8A33D;
+    --gold-dim:#B87E2C;
+    --text:#E8E6E0;
+    --muted:#8B92A0;
+    --line:rgba(232,230,224,0.12);
+    --max:1080px;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3{
+    font-family:'Sora', sans-serif;
+    font-weight:600;
+    line-height:1.15;
+    color:var(--text);
+  }
+
+  a{ color:inherit; text-decoration:none; }
+
+  .mono{ font-family:'JetBrains Mono', monospace; }
+
+  .wrap{
+    max-width:var(--max);
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(20,23,28,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+
+  nav.wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height:72px;
+  }
+
+  .brand{
+    font-family:'Sora', sans-serif;
+    font-weight:700;
+    font-size:1.1rem;
+  }
+
+  .brand span{ color:var(--gold); }
+
+  .nav-links{
+    display:flex;
+    gap:36px;
+    list-style:none;
+  }
+
+  .nav-links a{
+    font-size:0.92rem;
+    color:var(--muted);
+    transition:color 0.15s ease;
+  }
+
+  .nav-links a:hover{ color:var(--text); }
+
+  .nav-cta{
+    display:inline-block;
+    padding:9px 20px;
+    border:1px solid var(--gold);
+    color:var(--gold);
+    border-radius:4px;
+    font-size:0.88rem;
+    font-weight:500;
+    transition:background 0.15s ease, color 0.15s ease;
+  }
+
+  .nav-cta:hover{ background:var(--gold); color:var(--bg); }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:100px 0 84px;
+    border-bottom:1px solid var(--line);
+  }
+
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1fr 260px;
+    gap:56px;
+    align-items:center;
+  }
+
+  .eyebrow{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    color:var(--gold);
+    font-size:0.85rem;
+    margin-bottom:24px;
+  }
+
+  .eyebrow::before{
+    content:"";
+    width:28px;
+    height:1px;
+    background:var(--gold);
+  }
+
+  .hero h1{
+    font-size:clamp(2.2rem, 4.6vw, 3.2rem);
+    margin-bottom:20px;
+  }
+
+  .hero p.lede{
+    color:var(--muted);
+    font-size:1.08rem;
+    max-width:52ch;
+    margin-bottom:32px;
+  }
+
+  .hero-actions{ display:flex; gap:16px; flex-wrap:wrap; }
+
+  .btn-primary{
+    display:inline-block;
+    padding:14px 26px;
+    background:var(--gold);
+    color:var(--bg);
+    border-radius:4px;
+    font-weight:600;
+    font-size:0.95rem;
+    transition:background 0.15s ease, transform 0.15s ease;
+  }
+
+  .btn-primary:hover{ background:#F3B657; transform:translateY(-1px); }
+
+  .btn-ghost{
+    display:inline-block;
+    padding:14px 26px;
+    border:1px solid var(--line);
+    color:var(--text);
+    border-radius:4px;
+    font-size:0.95rem;
+    font-weight:500;
+  }
+
+  .btn-ghost:hover{ border-color:var(--gold); color:var(--gold); }
+
+  .avatar-frame{
+    width:100%;
+    aspect-ratio:1/1;
+    border-radius:6px;
+    border:1px solid var(--line);
+    background:linear-gradient(160deg, var(--panel-2), var(--panel));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    overflow:hidden;
+  }
+
+  .avatar-frame::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      linear-gradient(transparent 0%, transparent 60%, rgba(232,163,61,0.14) 100%);
+  }
+
+  .avatar-frame span{
+    font-family:'Sora', sans-serif;
+    font-weight:700;
+    font-size:3.6rem;
+    color:var(--gold);
+    letter-spacing:0.02em;
+  }
+
+  /* ---------- SECTION SHELL ---------- */
+  section{ padding:80px 0; border-bottom:1px solid var(--line); }
+  section:last-of-type{ border-bottom:none; }
+
+  .section-head{ margin-bottom:44px; }
+
+  .section-head .kicker{
+    color:var(--gold);
+    font-size:0.82rem;
+    margin-bottom:10px;
+    display:block;
+  }
+
+  .section-head h2{ font-size:1.9rem; }
+
+  .section-head p{
+    color:var(--muted);
+    max-width:56ch;
+    margin-top:12px;
+  }
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{
+    display:grid;
+    grid-template-columns:1.3fr 1fr;
+    gap:48px;
+  }
+
+  .about-copy p{ color:var(--text); margin-bottom:16px; max-width:56ch; }
+  .about-copy p:last-child{ margin-bottom:0; }
+
+  .stat-list{
+    border-left:1px solid var(--line);
+    padding-left:28px;
+    display:flex;
+    flex-direction:column;
+    gap:24px;
+  }
+
+  .stat-list div .num{
+    font-family:'Sora', sans-serif;
+    font-size:1.6rem;
+    color:var(--gold);
+    font-weight:700;
+  }
+
+  .stat-list div .label{
+    color:var(--muted);
+    font-size:0.88rem;
+    margin-top:2px;
+  }
+
+  /* ---------- SKILLS ---------- */
+  .skills-groups{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    border-radius:8px;
+    overflow:hidden;
+  }
+
+  .skill-group{
+    background:var(--panel);
+    padding:26px 24px;
+  }
+
+  .skill-group h4{
+    font-size:0.82rem;
+    color:var(--gold);
+    text-transform:none;
+    margin-bottom:14px;
+  }
+
+  .skill-tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+
+  .skill-tags span{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.78rem;
+    color:var(--text);
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    padding:5px 10px;
+    border-radius:4px;
+  }
+
+  /* ---------- EXPERIENCE ---------- */
+  .exp-item{
+    display:grid;
+    grid-template-columns:200px 1fr;
+    gap:32px;
+    padding:28px 0;
+    border-top:1px solid var(--line);
+  }
+
+  .exp-item:last-child{ padding-bottom:0; }
+
+  .exp-meta .role{ font-weight:600; font-size:1.05rem; margin-bottom:4px; }
+  .exp-meta .org{ color:var(--gold); font-size:0.9rem; margin-bottom:4px; }
+  .exp-meta .when{ color:var(--muted); font-size:0.82rem; }
+
+  .exp-body ul{ list-style:none; display:flex; flex-direction:column; gap:10px; }
+
+  .exp-body li{
+    position:relative;
+    padding-left:18px;
+    color:var(--muted);
+    font-size:0.95rem;
+  }
+
+  .exp-body li::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:9px;
+    width:5px;
+    height:5px;
+    background:var(--gold);
+    border-radius:50%;
+  }
+
+  .exp-body a{ color:var(--gold); border-bottom:1px solid var(--gold-dim); }
+
+  /* ---------- PROJECTS ---------- */
+  .projects-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:20px;
+  }
+
+  .project-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:26px;
+    display:flex;
+    flex-direction:column;
+  }
+
+  .project-card .year{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.75rem;
+    color:var(--gold);
+    margin-bottom:12px;
+  }
+
+  .project-card h3{ font-size:1.15rem; margin-bottom:10px; }
+
+  .project-card p{
+    color:var(--muted);
+    font-size:0.92rem;
+    margin-bottom:18px;
+    flex-grow:1;
+  }
+
+  .project-stack{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-bottom:18px;
+  }
+
+  .project-stack span{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.72rem;
+    color:var(--muted);
+    border:1px solid var(--line);
+    padding:4px 8px;
+    border-radius:4px;
+  }
+
+  .project-link{
+    font-size:0.86rem;
+    font-weight:500;
+    color:var(--gold);
+    border-bottom:1px solid var(--gold-dim);
+    align-self:flex-start;
+  }
+
+  /* ---------- CERTS + INTERESTS ---------- */
+  .split-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:56px;
+  }
+
+  .cert-list{ list-style:none; display:flex; flex-direction:column; }
+
+  .cert-list li{
+    padding:16px 0;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    gap:16px;
+    font-size:0.93rem;
+  }
+
+  .cert-list li:first-child{ padding-top:0; }
+  .cert-list li:last-child{ border-bottom:none; }
+
+  .cert-list .org{ color:var(--muted); font-size:0.85rem; text-align:right; }
+
+  .interest-list{ display:flex; flex-direction:column; gap:22px; }
+
+  .interest-item h4{ font-size:1rem; margin-bottom:6px; }
+  .interest-item p{ color:var(--muted); font-size:0.92rem; }
+
+  /* ---------- CONTACT / FOOTER ---------- */
+  .contact-cta{
+    text-align:center;
+    padding:90px 0 70px;
+  }
+
+  .contact-cta h2{
+    font-size:2.1rem;
+    max-width:18ch;
+    margin:0 auto 28px;
+  }
+
+  .contact-links{
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    flex-wrap:wrap;
+    margin-top:32px;
+  }
+
+  .contact-links a{
+    font-size:0.88rem;
+    color:var(--muted);
+    border:1px solid var(--line);
+    padding:10px 18px;
+    border-radius:4px;
+  }
+
+  .contact-links a:hover{ border-color:var(--gold); color:var(--gold); }
+
+  footer{
+    padding:32px 0;
+    border-top:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    font-size:0.82rem;
+    color:var(--muted);
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 860px){
+    .nav-links{ display:none; }
+    .hero-grid{ grid-template-columns:1fr; gap:36px; }
+    .avatar-frame{ max-width:200px; }
+    .about-grid{ grid-template-columns:1fr; gap:28px; }
+    .stat-list{ border-left:none; border-top:1px solid var(--line); padding-left:0; padding-top:24px; flex-direction:row; flex-wrap:wrap; gap:28px; }
+    .skills-groups{ grid-template-columns:1fr; }
+    .exp-item{ grid-template-columns:1fr; gap:12px; }
+    .projects-grid{ grid-template-columns:1fr; }
+    .split-grid{ grid-template-columns:1fr; gap:40px; }
+    .wrap{ padding:0 20px; }
+    section{ padding:56px 0; }
+  }
+
+  @media (max-width: 480px){
+    .hero-actions{ flex-direction:column; align-items:flex-start; }
+    .cert-list li{ flex-direction:column; gap:4px; }
+    .cert-list .org{ text-align:left; }
+    footer{ flex-direction:column; gap:8px; text-align:center; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <a href="#top" class="brand">Mohit<span>.</span>dev</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">Hire Me</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow">Haldwani, Uttarakhand</div>
+        <h1>Mohit Kumar — web developer building scalable apps with React, Flask &amp; a bit of machine learning.</h1>
+        <p class="lede">MCA graduate who likes shipping clean, responsive frontends as much as training a model that actually predicts something useful. Currently freelancing while chasing the next hard problem.</p>
+        <div class="hero-actions">
+          <a href="#projects" class="btn-primary">View Projects</a>
+          <a href="#contact" class="btn-ghost">Download Resume</a>
+        </div>
+      </div>
+      <div class="avatar-frame"><span>MK</span></div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker">About</span>
+        <h2>A developer who likes finishing what he starts</h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-copy">
+          <p>I'm an MCA graduate from Graphic Era Hill University with hands-on experience across web development and applied machine learning. My comfort zone is the full stack — React and Tailwind on the frontend, Flask and Node on the backend, MySQL underneath it all — but I'm just as happy inside a Jupyter notebook cleaning a messy dataset.</p>
+          <p>Since 2025 I've been freelancing as a web developer, most recently building a full business website for a digital marketing agency from requirements gathering through to live deployment. Outside of client work, I build side projects that mix the two things I care about most: usable interfaces and models that make real predictions.</p>
+        </div>
+        <div class="stat-list">
+          <div>
+            <div class="num">4+</div>
+            <div class="label">Full-stack &amp; ML projects shipped</div>
+          </div>
+          <div>
+            <div class="num">2024</div>
+            <div class="label">MCA, Graphic Era Hill University</div>
+          </div>
+          <div>
+            <div class="num">5</div>
+            <div class="label">Certifications completed</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker">Skills</span>
+        <h2>Tools &amp; technologies</h2>
+      </div>
+      <div class="skills-groups">
+        <div class="skill-group">
+          <h4>Languages &amp; Concepts</h4>
+          <div class="skill-tags">
+            <span>C</span><span>Python</span><span>JavaScript</span><span>OOP</span><span>DBMS</span><span>DSA</span><span>REST APIs</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h4>Frontend &amp; Backend</h4>
+          <div class="skill-tags">
+            <span>HTML5</span><span>CSS3</span><span>React</span><span>Tailwind CSS</span><span>Node.js</span><span>Flask</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h4>Database &amp; Tools</h4>
+          <div class="skill-tags">
+            <span>MySQL</span><span>VS Code</span><span>Git</span><span>GitHub</span><span>Postman</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker">Experience</span>
+        <h2>Where I've worked</h2>
+      </div>
+      <div class="exp-item">
+        <div class="exp-meta">
+          <div class="role">Freelance Web Developer</div>
+          <div class="org">ViewSpark · Remote</div>
+          <div class="when">2025 — Present</div>
+        </div>
+        <div class="exp-body">
+          <ul>
+            <li>Designed and developed a fully responsive business website for a digital marketing agency using modern web technologies.</li>
+            <li>Implemented interactive UI components and responsive layouts, optimizing the experience across desktop and mobile.</li>
+            <li>Built out Services, Portfolio, Contact, Testimonials, and Call-to-Action pages with clean, scalable code.</li>
+            <li>Worked directly with the client to gather requirements, incorporate feedback, and deliver on time — live at <a href="https://viewspark.in" target="_blank" rel="noopener">viewspark.in</a> and <a href="https://studio.viewspark.in" target="_blank" rel="noopener">studio.viewspark.in</a>.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker">Projects</span>
+        <h2>Things I've built</h2>
+      </div>
+      <div class="projects-grid">
+        <div class="project-card">
+          <div class="year mono">2026</div>
+          <h3>Personal Portfolio Website</h3>
+          <p>A fully responsive portfolio built with reusable React components, smooth Framer Motion animation, and a mobile-first layout — including a project showcase and resume download.</p>
+          <div class="project-stack">
+            <span>React.js</span><span>Tailwind CSS</span><span>Framer Motion</span>
+          </div>
+          <a href="#" class="project-link">View on GitHub ↗</a>
+        </div>
+        <div class="project-card">
+          <div class="year mono">2025</div>
+          <h3>IPL Score Predictor</h3>
+          <p>A machine learning model that predicts first-innings IPL scores from historical match data, served through a Flask app for real-time predictions.</p>
+          <div class="project-stack">
+            <span>Python</span><span>Flask</span><span>Machine Learning</span>
+          </div>
+          <a href="#" class="project-link">View on GitHub ↗</a>
+        </div>
+        <div class="project-card">
+          <div class="year mono">2024</div>
+          <h3>College Website</h3>
+          <p>A full-stack college management platform with secure student authentication, an admin dashboard, fee management, and result management modules.</p>
+          <div class="project-stack">
+            <span>MongoDB</span><span>Express.js</span><span>React.js</span><span>Node.js</span>
+          </div>
+          <a href="#" class="project-link">View on GitHub ↗</a>
+        </div>
+        <div class="project-card">
+          <div class="year mono">2024</div>
+          <h3>Forest Fire Prediction</h3>
+          <p>A logistic regression model that predicts forest fire risk from environmental and weather parameters, integrated into a Flask app for real-time use.</p>
+          <div class="project-stack">
+            <span>Python</span><span>Flask</span><span>Logistic Regression</span>
+          </div>
+          <a href="#" class="project-link">View on GitHub ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="certs">
+    <div class="wrap">
+      <div class="split-grid">
+        <div>
+          <div class="section-head">
+            <span class="kicker">Certifications</span>
+            <h2>Ongoing learning</h2>
+          </div>
+          <ul class="cert-list">
+            <li><span>Cloud Computing — Jr Analyst</span><span class="org">Electronics Sector Skills Council of India</span></li>
+            <li><span>Python for Beginners</span><span class="org">Simplilearn</span></li>
+            <li><span>Introduction to Data Analytics</span><span class="org">Simplilearn</span></li>
+            <li><span>Claude 101</span><span class="org">Anthropic Academy</span></li>
+          </ul>
+        </div>
+        <div>
+          <div class="section-head">
+            <span class="kicker">Beyond the code</span>
+            <h2>What I do off-screen</h2>
+          </div>
+          <div class="interest-list">
+            <div class="interest-item">
+              <h4>Biography &amp; Landscape Photography</h4>
+              <p>Focused on framing, composition, and visual storytelling.</p>
+            </div>
+            <div class="interest-item">
+              <h4>Fitness &amp; Strength Training</h4>
+              <p>Dedicated to weightlifting and structured strength routines.</p>
+            </div>
+            <div class="interest-item">
+              <h4>Hiking &amp; Outdoor Exploration</h4>
+              <p>Always looking for the next nature trail or wilderness area.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+  <div class="wrap contact-cta">
+    <span class="kicker">Contact</span>
+    <h2>Let's build something together</h2>
+
+    <a href="mailto:mohit3575@gmail.com" class="btn-primary">
+      mohit3575@gmail.com
+    </a>
+
+    <div class="contact-links">
+      <a href="tel:+916397609855">+91 6397609855</a>
+
+      <a href="https://www.linkedin.com/in/mohit-kumar-98a843193"
+         target="_blank"
+         rel="noopener noreferrer">
+        LinkedIn ↗
+      </a>
+
+      <a href="https://github.com/FURY3575"
+         target="_blank"
+         rel="noopener noreferrer">
+        GitHub ↗
+      </a>
+
+      <a href="#">Haldwani, Uttarakhand</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap footer-inner" style="display:flex; justify-content:space-between; width:100%;">
+    <span>© 2026 Mohit Kumar</span>
+    <span>Built with HTML, CSS &amp; a lot of coffee</span>
+  </div>
+</footer>
+
+</body>
+</html>
