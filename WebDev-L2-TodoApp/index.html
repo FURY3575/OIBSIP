@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daybook — To-Do</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EEF1F6;
+    --panel:#FFFFFF;
+    --ink:#1E2430;
+    --muted:#6B7280;
+    --line:#E4E7ED;
+    --coral:#FF6B5B;
+    --coral-dark:#E5503F;
+    --green:#34A879;
+    --green-bg:#E7F5EE;
+    --coral-bg:#FFEDEA;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    padding:48px 20px;
+  }
+
+  h1, h2{
+    font-family:'Outfit', sans-serif;
+    font-weight:600;
+  }
+
+  .app{
+    max-width:960px;
+    margin:0 auto;
+  }
+
+  /* ---------- HEADER ---------- */
+  .app-header{
+    margin-bottom:32px;
+  }
+
+  .app-header h1{
+    font-size:1.9rem;
+    margin-bottom:6px;
+  }
+
+  .app-header p{
+    color:var(--muted);
+    font-size:0.95rem;
+  }
+
+  /* ---------- ADD TASK BAR ---------- */
+  .add-bar{
+    display:flex;
+    gap:12px;
+    margin-bottom:36px;
+  }
+
+  #taskInput{
+    flex:1;
+    padding:14px 18px;
+    font-size:1rem;
+    font-family:'Inter', sans-serif;
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    background:var(--panel);
+    color:var(--ink);
+    outline:none;
+    transition:border-color 0.15s ease;
+  }
+
+  #taskInput:focus{ border-color:var(--coral); }
+
+  #addBtn{
+    padding:14px 26px;
+    background:var(--coral);
+    color:#fff;
+    border:none;
+    border-radius:10px;
+    font-family:'Inter', sans-serif;
+    font-weight:600;
+    font-size:0.95rem;
+    cursor:pointer;
+    white-space:nowrap;
+    transition:background 0.15s ease, transform 0.1s ease;
+  }
+
+  #addBtn:hover{ background:var(--coral-dark); }
+  #addBtn:active{ transform:scale(0.98); }
+
+  /* ---------- COLUMNS ---------- */
+  .columns{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:28px;
+  }
+
+  .column-head{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:16px;
+  }
+
+  .column-head h2{
+    font-size:1.1rem;
+  }
+
+  .count-badge{
+    font-family:'Inter', sans-serif;
+    font-size:0.78rem;
+    font-weight:600;
+    padding:3px 10px;
+    border-radius:999px;
+  }
+
+  .count-badge.pending{ background:var(--coral-bg); color:var(--coral-dark); }
+  .count-badge.completed{ background:var(--green-bg); color:var(--green); }
+
+  .task-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    min-height:60px;
+  }
+
+  /* ---------- TASK CARD ---------- */
+  .task{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:14px 16px;
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+  }
+
+  .task-toggle{
+    flex-shrink:0;
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    border:2px solid var(--line);
+    background:transparent;
+    cursor:pointer;
+    margin-top:2px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:border-color 0.15s ease, background 0.15s ease;
+  }
+
+  .task-toggle:hover{ border-color:var(--coral); }
+
+  .task.completed .task-toggle{
+    background:var(--green);
+    border-color:var(--green);
+  }
+
+  .task-toggle svg{
+    width:12px;
+    height:12px;
+    opacity:0;
+    transition:opacity 0.15s ease;
+  }
+
+  .task.completed .task-toggle svg{ opacity:1; }
+
+  .task-body{ flex:1; min-width:0; }
+
+  .task-text{
+    font-size:0.98rem;
+    color:var(--ink);
+    word-break:break-word;
+  }
+
+  .task.completed .task-text{
+    color:var(--muted);
+    text-decoration:line-through;
+  }
+
+  .task-meta{
+    font-size:0.76rem;
+    color:var(--muted);
+    margin-top:5px;
+  }
+
+  .task-edit-input{
+    width:100%;
+    font-family:'Inter', sans-serif;
+    font-size:0.98rem;
+    padding:6px 8px;
+    border:1.5px solid var(--coral);
+    border-radius:6px;
+    outline:none;
+    color:var(--ink);
+  }
+
+  .task-actions{
+    display:flex;
+    gap:6px;
+    flex-shrink:0;
+  }
+
+  .task-actions button{
+    width:30px;
+    height:30px;
+    border-radius:8px;
+    border:1px solid var(--line);
+    background:var(--panel);
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--muted);
+    transition:background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .task-actions button:hover{ background:var(--bg); color:var(--ink); }
+
+  .task-actions .delete-btn:hover{ color:var(--coral-dark); border-color:var(--coral-dark); }
+
+  .task-actions svg{ width:15px; height:15px; }
+
+  /* ---------- EMPTY STATE ---------- */
+  .empty-state{
+    padding:36px 20px;
+    text-align:center;
+    color:var(--muted);
+    font-size:0.9rem;
+    border:1.5px dashed var(--line);
+    border-radius:12px;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 680px){
+    body{ padding:32px 16px; }
+    .add-bar{ flex-direction:column; }
+    #addBtn{ width:100%; }
+    .columns{ grid-template-columns:1fr; gap:32px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="app-header">
+    <h1>Daybook</h1>
+    <p>A simple place to keep track of what's next.</p>
+  </div>
+
+  <div class="add-bar">
+    <input type="text" id="taskInput" placeholder="What needs doing?" autocomplete="off">
+    <button id="addBtn">Add Task</button>
+  </div>
+
+  <div class="columns">
+    <div>
+      <div class="column-head">
+        <h2>Pending</h2>
+        <span class="count-badge pending" id="pendingCount">0 pending</span>
+      </div>
+      <div class="task-list" id="pendingList"></div>
+    </div>
+    <div>
+      <div class="column-head">
+        <h2>Completed</h2>
+        <span class="count-badge completed" id="completedCount">0 completed</span>
+      </div>
+      <div class="task-list" id="completedList"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const STORAGE_KEY = 'daybook-tasks-v1';
+
+  const taskInput = document.getElementById('taskInput');
+  const addBtn = document.getElementById('addBtn');
+  const pendingList = document.getElementById('pendingList');
+  const completedList = document.getElementById('completedList');
+  const pendingCount = document.getElementById('pendingCount');
+  const completedCount = document.getElementById('completedCount');
+
+  let tasks = loadTasks();
+
+  function loadTasks(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    }catch(e){
+      console.error('Could not load tasks from storage', e);
+      return [];
+    }
+  }
+
+  function saveTasks(){
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+    }catch(e){
+      console.error('Could not save tasks to storage', e);
+    }
+  }
+
+  function formatTime(iso){
+    if(!iso) return '';
+    const d = new Date(iso);
+    return d.toLocaleString(undefined, { month:'short', day:'numeric', hour:'numeric', minute:'2-digit' });
+  }
+
+  function addTask(text){
+    const trimmed = text.trim();
+    if(!trimmed) return;
+    tasks.unshift({
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+      text: trimmed,
+      completed: false,
+      createdAt: new Date().toISOString(),
+      completedAt: null
+    });
+    saveTasks();
+    render();
+  }
+
+  function toggleComplete(id){
+    const task = tasks.find(t => t.id === id);
+    if(!task) return;
+    task.completed = !task.completed;
+    task.completedAt = task.completed ? new Date().toISOString() : null;
+    saveTasks();
+    render();
+  }
+
+  function deleteTask(id){
+    tasks = tasks.filter(t => t.id !== id);
+    saveTasks();
+    render();
+  }
+
+  function updateTaskText(id, newText){
+    const trimmed = newText.trim();
+    const task = tasks.find(t => t.id === id);
+    if(!task) return;
+    if(trimmed){
+      task.text = trimmed;
+    }
+    saveTasks();
+    render();
+  }
+
+  function createIconCheck(){
+    return '<svg viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5L6.2 12L13 4"/></svg>';
+  }
+
+  function createIconEdit(){
+    return '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 3.5l3 3L7 16l-4 1 1-4 9.5-9.5z"/></svg>';
+  }
+
+  function createIconDelete(){
+    return '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h12M8 6V4h4v2M6 6l1 10h6l1-10"/></svg>';
+  }
+
+  function buildTaskCard(task){
+    const card = document.createElement('div');
+    card.className = 'task' + (task.completed ? ' completed' : '');
+    card.dataset.id = task.id;
+
+    const toggle = document.createElement('button');
+    toggle.className = 'task-toggle';
+    toggle.setAttribute('aria-label', task.completed ? 'Mark as pending' : 'Mark as complete');
+    toggle.innerHTML = createIconCheck();
+    toggle.addEventListener('click', () => toggleComplete(task.id));
+
+    const body = document.createElement('div');
+    body.className = 'task-body';
+
+    const textEl = document.createElement('div');
+    textEl.className = 'task-text';
+    textEl.textContent = task.text;
+
+    const metaEl = document.createElement('div');
+    metaEl.className = 'task-meta';
+    metaEl.textContent = task.completed
+      ? `Added ${formatTime(task.createdAt)} · Completed ${formatTime(task.completedAt)}`
+      : `Added ${formatTime(task.createdAt)}`;
+
+    body.appendChild(textEl);
+    body.appendChild(metaEl);
+
+    const actions = document.createElement('div');
+    actions.className = 'task-actions';
+
+    const editBtn = document.createElement('button');
+    editBtn.className = 'edit-btn';
+    editBtn.setAttribute('aria-label', 'Edit task');
+    editBtn.innerHTML = createIconEdit();
+    editBtn.addEventListener('click', () => startEdit(card, task, body, textEl));
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'delete-btn';
+    deleteBtn.setAttribute('aria-label', 'Delete task');
+    deleteBtn.innerHTML = createIconDelete();
+    deleteBtn.addEventListener('click', () => deleteTask(task.id));
+
+    actions.appendChild(editBtn);
+    actions.appendChild(deleteBtn);
+
+    card.appendChild(toggle);
+    card.appendChild(body);
+    card.appendChild(actions);
+
+    return card;
+  }
+
+  function startEdit(card, task, body, textEl){
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'task-edit-input';
+    input.value = task.text;
+
+    body.replaceChild(input, textEl);
+    input.focus();
+    input.setSelectionRange(input.value.length, input.value.length);
+
+    function commit(){
+      updateTaskText(task.id, input.value);
+    }
+
+    input.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter'){ e.preventDefault(); commit(); }
+      if(e.key === 'Escape'){ render(); }
+    });
+    input.addEventListener('blur', commit);
+  }
+
+  function renderEmptyState(container, message){
+    const empty = document.createElement('div');
+    empty.className = 'empty-state';
+    empty.textContent = message;
+    container.appendChild(empty);
+  }
+
+  function render(){
+    pendingList.innerHTML = '';
+    completedList.innerHTML = '';
+
+    const pending = tasks.filter(t => !t.completed);
+    const completed = tasks.filter(t => t.completed);
+
+    pendingCount.textContent = `${pending.length} pending`;
+    completedCount.textContent = `${completed.length} completed`;
+
+    if(pending.length === 0){
+      renderEmptyState(pendingList, "Nothing pending — add a task above to get started.");
+    } else {
+      pending.forEach(task => pendingList.appendChild(buildTaskCard(task)));
+    }
+
+    if(completed.length === 0){
+      renderEmptyState(completedList, "Nothing completed yet — finished tasks will show up here.");
+    } else {
+      completed.forEach(task => completedList.appendChild(buildTaskCard(task)));
+    }
+  }
+
+  addBtn.addEventListener('click', () => {
+    addTask(taskInput.value);
+    taskInput.value = '';
+    taskInput.focus();
+  });
+
+  taskInput.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter'){
+      addTask(taskInput.value);
+      taskInput.value = '';
+    }
+  });
+
+  render();
+</script>
+
+</body>
+</html>
